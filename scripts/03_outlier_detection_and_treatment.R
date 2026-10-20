@@ -8,7 +8,7 @@ dades <- readRDS("../data/dataset_imputat.rds")
 es_numeric <- sapply(dades, is.numeric)
 varNum <- names(dades)[es_numeric]
 
-# Excloem les variables que no tenen sentit per a la detecció d'outliers
+# Excloem les variables que no tenen sentit en la detecció d'outliers
 vars_a_excloure <- c("id", "host_id", "latitude", "longitude")
 
 varNum_net <- varNum[!(varNum %in% vars_a_excloure)]
