@@ -1,274 +1,113 @@
-# Anàlisi del Mercat d'Airbnb a Amsterdam mitjançant Mineria de Dades
 
-Aquest repositori conté el codi font i la documentació del projecte final de l'assignatura PMAAD (Preprocessament i Models Avançats d'Anàlisi de Dades, UPC). L'objectiu és analitzar i extreure coneixement de negoci del mercat d'Airbnb al centre d'Amsterdam aplicant tècniques avançades de mineria de dades, geoestadística i anàlisi textual.
+# Airbnb Market Analysis in Amsterdam Using Data Mining
 
-![Dashboard Power BI](images/04_dashboard_powerbi_valor_preu.png)
-
-
-
-## Estructura del Repositori
-*   **`data/`**: Datasets preprocessats, conjunts intermedis i models (.rds, .csv).
-*   **`images/`**: Visualitzacions clau extretes per a aquesta documentació.
-*   **`powerbi/`**: Fitxer original, exportació del quadre de comandament interactiu.
-*   **`profiling/`**: Resultats gràfics i taules generades durant la fase de perfilat avançat (CPG, TLP, aTLP).
-*   **`reports/`**: Informes tècnic-gerencials, presentacions i annexos de les entregues.
-*   **`scripts/`**: Codi font seqüenciat en R i Python per reproduir totes les fases del projecte.
-
-
-## Obtenció de les dades
-
-Els datasets originals **no s'inclouen** en aquest repositori perquè la seva mida supera els límits recomanats per GitHub.
-
-Les dades es poden descarregar des del projecte **Inside Airbnb**:
-
-https://insideairbnb.com/get-the-data/
-
-Aquest projecte utilitza el conjunt de dades d'**Amsterdam**. Un cop descarregats els fitxers `listings.csv` i `reviews.csv`, cal copiar-los al directori `data/` abans d'executar els scripts.
-
----
-
-## Fases del Projecte
-
-### PART I: Marc de Referència
-Introducció al problema del mercat de lloguer turístic a Amsterdam, descripció de la font de dades i definició de l'abast del projecte basat en objectius de negoci.
-
-### PART II & III: Qualitat, Preprocessament de dades i EDA
-Neteja profunda i preparació de la base de dades per al modelatge:
-*   **Perfilament i Missings:** Avaluació de la qualitat, detecció d'errors i estratègies d'imputació de valors perduts.
-*   **Outliers i Enginyeria de Variables:** Tractament de valors atípics i creació de noves variables significatives.
-*   **AED:** Anàlisi Exploratòria de Dades univariant i bivariant sobre la base neta.
-
-### PART IV & V: Clustering i Profiling Avançat
-Segmentació del mercat per extreure perfils d'allotjaments:
-*   **Clustering:** Aplicació d'algorismes avançats com CURE (amb distància Gower per a dades mixtes).
-*   **Profiling:** Construcció del *Class Profiling Graph* (CPG) i *Targeted Lexical Profiling* (TLP / aTLP) per definir la semàntica dels clústers trobats.
-
-### PART VI: Anàlisi Factorial (ACM i FAMD)
-Reducció de dimensionalitat i extracció de components principals:
-*   **ACM:** Anàlisi de Correspondències Múltiple sobre variables categòriques amb anàlisi d'individus i variables (Biplot).
-*   **FAMD:** *Factor Analysis of Mixed Data* per estructurar un nou clustering basat en les coordenades factorials.
-
-### PART VII: Estadística Descriptiva amb MAPES (Geoestadística Descriptiva)
-Desenvolupament d'un quadre de comandament interactiu amb Microsoft Power BI per explicar una història visual i georeferenciada de les dades d'Airbnb, estratificant per zones i variables clau.
-
-### PART VIII: Geoestadística
-Modelatge espacial (Procés de Tipus I i II):
-*   **Kriging Ordinari:** Disseny i validació d'un model d'interpolació espacial per predir el preu dels allotjaments en malles regulars.
-*   **Processos de Punts:** Anàlisi de la intensitat i distribució geogràfica segregada per tipus d'amfitrió.
-
-![Mapa amb marca de Propietari](images/05_mapa_particulars_vs_professionals.png)
-
-### PART IX: Textual Analysis
-Processament de Llenguatge Natural (NLP) sobre una mostra de 1.000 ressenyes d'usuaris:
-*   **Preprocessament textual:** Neteja, stemming i creació de la matriu DTM (Document-Term Matrix).
-*   **LSA / MCA Adaptat:** Anàlisi de Correspondències Simple (CA) i CA-GALT per vincular els termes a variables categòriques suplementàries.
-*   **Topic Modelling (LDA):** *Latent Dirichlet Allocation* per descobrir els tòpics latents a les experiències dels usuaris.
-
-![Anàlisi Textual](images/07_lda_wordclouds.png)
-
-### PART X: Gestió del Projecte i Conclusions
-*   **Gestió:** Resum del desenvolupament, incidències i eines de planificació (Gantt) utilitzades.
-*   **Conclusions:** Highlights i insights rellevants orientats a la presa de decisions de negoci per a un client final.
-
----
-
-## Entorn d'Execució
-
-El projecte combina R (llenguatge principal per a l'EDA, geoestadística i NLP) i Python (per a algorismes específics de clustering com CURE amb matrius de Gower). Cal tenir instal·lades les següents dependències per reproduir els scripts:
-
-### Entorn R
-
-```R
-# 1. Manipulació, Neteja i Transformació de Dades
-install.packages(c("tidyverse", "dplyr", "tidyr", "reshape2", "Hmisc"))
-
-# 2. Exploració de Dades (EDA) i Visualització Avançada
-install.packages(c("visdat", "inspectdf", "skimr", "DataExplorer", "SmartEDA", 
-                   "dataReporter", "patchwork", "ggcorrplot", "corrplot", 
-                   "ggplot2", "ggrepel", "ggpubr", "grid", "gridExtra"))
-
-# 3. Tractament de Valors Faltants i Imputació
-install.packages(c("naniar", "VIM", "mice", "missForest", "StatMatch"))
-
-# 4. Detecció d'Outliers
-install.packages(c("EnvStats", "outliers", "chemometrics", "dbscan", "isotree", "tclust"))
-
-# 5. Selecció de Variables i Random Forest
-install.packages(c("vcd", "rcompanion", "caret", "mlbench", "XICOR", "randomForest"))
-
-# 6. Clustering, Profiling i Anàlisi Factorial (MCA, FAMD, CA)
-install.packages(c("dtwclust", "dendextend", "proxy", "cluster", "gower", 
-                   "clustMixType", "factoextra", "flexclust", "FactoMineR", "psych"))
-
-# 7. Geoestadística i Modelatge Espacial
-install.packages(c("spatstat", "sp", "sf", "gstat", "geoR", "raster", "OpenStreetMap", "rJava"))
-
-# 8. Anàlisi Textual i NLP
-install.packages(c("tm", "SnowballC", "topicmodels", "tidytext", "cld3", "lda", "wordcloud", "RColorBrewer"))
-remotes::install_github("nikita-moor/ldatuning")
-
-```
-
-### Entorn Python
-
-Per executar la integració d'algorismes i l'exportació de dades a R, s'utilitzen els següents paquets:
-
-```bash
-pip install pandas numpy gower scipy matplotlib scikit-learn pyreadr
-```
-
-
----
-
-# English Version
-
-# Airbnb Amsterdam Data Mining & Advanced Analytics
-
-This repository contains the source code and documentation for the final project of the **PMAAD (Advanced Data Preprocessing and Data Mining Models)** course at the Universitat Politècnica de Catalunya (UPC).
-
-The objective of the project is to analyze the Airbnb market in central Amsterdam and extract business insights using advanced data mining, geostatistics and natural language processing techniques.
+This repository contains the source code and documentation for the final project of the course PMAAD (Preprocessing and Advanced Models for Data Analysis, UPC). The goal is to analyze and extract business insights from the Airbnb market in central Amsterdam by applying advanced data mining, geostatistics, and textual analysis techniques.
 
 ## Repository Structure
+*   **`data/`**: Preprocessed datasets, intermediate datasets, and models (.rds, .csv).
+*   **`images/`**: Key visualizations extracted for this documentation.
+*   **`powerbi/`**: Original file, interactive dashboard export.
+*   **`profiling/`**: Graphical results and tables generated during the advanced profiling phase (CPG, TLP, aTLP).
+*   **`reports/`**: Technical-management reports, presentations, and submission appendices.
+*   **`scripts/`**: Sequenced source code in R and Python to reproduce all project phases.
 
-- **`data/`**: Preprocessed datasets, intermediate datasets and serialized models (.rds, .csv).
-- **`images/`**: Figures and visualizations used throughout the documentation.
-- **`powerbi/`**: Interactive Power BI dashboard.
-- **`profiling/`**: Outputs generated during advanced profiling (CPG, TLP and aTLP).
-- **`reports/`**: Technical reports, presentations and appendices.
-- **`scripts/`**: R and Python source code reproducing every stage of the project.
 
-
-## Dataset
+## Data Collection
 
 The original datasets are **not included** in this repository because their size exceeds GitHub's recommended limits.
 
-They can be downloaded from the **Inside Airbnb** project:
+The data can be downloaded from the **Inside Airbnb** project:
 
-https://insideairbnb.com/get-the-data/
+[https://insideairbnb.com/get-the-data/](https://insideairbnb.com/get-the-data/)
 
-This project uses the **Amsterdam** dataset. Download the files `listings.csv` and `reviews.csv` and place them inside the `data/` directory before executing the scripts.
+This project uses the **Amsterdam** dataset. Once the `listings.csv` and `reviews.csv` files are downloaded, they must be copied into the `data/` directory before running the scripts.
 
----
+***
 
 ## Project Phases
 
-### Part I – Project Background
+### PART I: Framework of Reference
+Introduction to the problem of the tourist rental market in Amsterdam, description of the data source, and definition of the project scope based on business objectives.
 
-Introduction to the Airbnb rental market in Amsterdam, description of the data source, and definition of the project's business objectives and scope.
+### PART II & III: Quality, Data Preprocessing, and EDA
+In-depth cleaning and database preparation for modeling:
+*   **Profiling and Missings:** Quality assessment, error detection, and missing value imputation strategies.
+*   **Outliers and Feature Engineering:** Outlier treatment and creation of new meaningful variables.
+*   **EDA:** Univariate and bivariate Exploratory Data Analysis on the clean dataset.
 
-### Parts II & III – Data Quality, Preprocessing and Exploratory Data Analysis
+### PART IV & V: Clustering and Advanced Profiling
+Market segmentation to extract accommodation profiles:
+*   **Clustering:** Application of advanced algorithms such as CURE (with Gower distance for mixed data).
+*   **Profiling:** Construction of the *Class Profiling Graph* (CPG) and *Targeted Lexical Profiling* (TLP / aTLP) to define the semantics of the discovered clusters.
 
-Comprehensive data cleaning and preparation before model development.
+### PART VI: Factor Analysis (MCA and FAMD)
+Dimensionality reduction and principal component extraction:
+*   **MCA:** Multiple Correspondence Analysis on categorical variables with individual and variable analysis (Biplot).
+*   **FAMD:** *Factor Analysis of Mixed Data* to structure a new clustering based on factorial coordinates.
 
-Main tasks include:
+### PART VII: Descriptive Statistics with MAPS (Descriptive Geostatistics)
+Development of an interactive dashboard with Microsoft Power BI to deliver a visual, georeferenced narrative of the Airbnb data, stratified by areas and key variables.
 
-* **Data profiling and missing values:** Assessment of data quality, anomaly detection and missing value imputation strategies.
-* **Outlier detection and feature engineering:** Identification and treatment of outliers together with the creation of meaningful derived variables.
-* **Exploratory Data Analysis (EDA):** Univariate and bivariate statistical analysis of the cleaned dataset.
+### PART VIII: Geostatistics
+Spatial modeling (Type I and Type II processes):
+*   **Ordinary Kriging:** Design and validation of a spatial interpolation model to predict accommodation prices on regular grids.
+*   **Point Processes:** Analysis of intensity and geographical distribution segregated by host type.
 
-### Parts IV & V – Clustering and Advanced Profiling
 
-Market segmentation to identify different accommodation profiles.
 
-The analysis includes:
+### PART IX: Textual Analysis
+Natural Language Processing (NLP) on a sample of 1,000 user reviews:
+*   **Text Preprocessing:** Cleaning, stemming, and creation of the DTM (Document-Term Matrix).
+*   **LSA / Adapted MCA:** Simple Correspondence Analysis (CA) and CA-GALT to link terms to supplementary categorical variables.
+*   **Topic Modeling (LDA):** *Latent Dirichlet Allocation* to discover latent topics within user experiences.
 
-* **Clustering:** Application of advanced clustering algorithms such as **CURE**, using **Gower distance** to handle mixed-type data.
-* **Cluster profiling:** Construction of **Class Profiling Graphs (CPG)** together with **Targeted Lexical Profiling (TLP)** and **Advanced Targeted Lexical Profiling (aTLP)** to characterize the semantic meaning of each cluster.
 
-### Part VI – Factor Analysis (MCA and FAMD)
 
-Dimensionality reduction and extraction of latent components.
+### PART X: Project Management and Conclusions
+*   **Management:** Summary of development, incidents, and planning tools (Gantt) used.
+*   **Conclusions:** Highlights and key insights aimed at business decision-making for an end client.
 
-This stage includes:
-
-* **Multiple Correspondence Analysis (MCA):** Analysis of categorical variables together with individual and variable projections using biplots.
-* **Factor Analysis of Mixed Data (FAMD):** Extraction of mixed-data latent factors used to perform an alternative clustering approach.
-
-### Part VII – Descriptive Geostatistics and Interactive Mapping
-
-Development of an interactive **Microsoft Power BI** dashboard providing a geographical overview of the Airbnb market in Amsterdam.
-
-The dashboard allows users to explore spatial patterns by neighborhood and key business indicators through interactive visualizations.
-
-### Part VIII – Geostatistics
-
-Spatial statistical modeling based on Type I and Type II spatial processes.
-
-The analysis includes:
-
-* **Ordinary Kriging:** Development and validation of a spatial interpolation model for predicting Airbnb prices across a regular spatial grid.
-* **Spatial Point Processes:** Analysis of the geographical intensity and distribution of listings according to host type.
-
-![Host Type Map](images/05_mapa_particulars_vs_professionals.png)
-
-### Part IX – Textual Analysis
-
-Natural Language Processing (NLP) performed on a sample of 1,000 Airbnb user reviews.
-
-The workflow includes:
-
-* **Text preprocessing:** Cleaning, stemming and construction of the Document-Term Matrix (DTM).
-* **Correspondence Analysis:** Standard Correspondence Analysis (CA) together with CA-GALT to relate textual terms with supplementary categorical variables.
-* **Topic Modeling (LDA):** Application of **Latent Dirichlet Allocation (LDA)** to identify the latent topics discussed by Airbnb guests.
-
-![Text Analysis](images/07_lda_wordclouds.png)
-
-### Part X – Project Management and Conclusions
-
-* **Project Management:** Summary of project development, encountered issues and planning tools (including Gantt charts).
-* **Conclusions:** Key findings and business insights intended to support strategic decision-making.
-
----
+***
 
 ## Execution Environment
 
-The project combines **R** (used for data preprocessing, exploratory analysis, geostatistics and NLP) with **Python** (used for specific clustering algorithms such as CURE using Gower distance matrices).
-
-Install the following dependencies before executing the scripts.
+The project combines R (primary language for EDA, geostatistics, and NLP) and Python (for specific clustering algorithms such as CURE with Gower matrices). The following dependencies must be installed to run the scripts:
 
 ### R Environment
 
 ```R
-# 1. Data Manipulation and Transformation
+# 1. Data Manipulation, Cleaning, and Transformation
 install.packages(c("tidyverse", "dplyr", "tidyr", "reshape2", "Hmisc"))
 
-# 2. Exploratory Data Analysis and Visualization
-install.packages(c("visdat", "inspectdf", "skimr", "DataExplorer", "SmartEDA",
-                   "dataReporter", "patchwork", "ggcorrplot", "corrplot",
+# 2. Data Exploration (EDA) and Advanced Visualization
+install.packages(c("visdat", "inspectdf", "skimr", "DataExplorer", "SmartEDA", 
+                   "dataReporter", "patchwork", "ggcorrplot", "corrplot", 
                    "ggplot2", "ggrepel", "ggpubr", "grid", "gridExtra"))
 
-# 3. Missing Data Treatment
+# 3. Missing Value Treatment and Imputation
 install.packages(c("naniar", "VIM", "mice", "missForest", "StatMatch"))
 
 # 4. Outlier Detection
-install.packages(c("EnvStats", "outliers", "chemometrics", "dbscan",
-                   "isotree", "tclust"))
+install.packages(c("EnvStats", "outliers", "chemometrics", "dbscan", "isotree", "tclust"))
 
-# 5. Feature Selection
-install.packages(c("vcd", "rcompanion", "caret", "mlbench",
-                   "XICOR", "randomForest"))
+# 5. Feature Selection and Random Forest
+install.packages(c("vcd", "rcompanion", "caret", "mlbench", "XICOR", "randomForest"))
 
-# 6. Clustering, Profiling and Factor Analysis
-install.packages(c("dtwclust", "dendextend", "proxy", "cluster", "gower",
-                   "clustMixType", "factoextra", "flexclust",
-                   "FactoMineR", "psych"))
+# 6. Clustering, Profiling, and Factor Analysis (MCA, FAMD, CA)
+install.packages(c("dtwclust", "dendextend", "proxy", "cluster", "gower", 
+                   "clustMixType", "factoextra", "flexclust", "FactoMineR", "psych"))
 
-# 7. Geostatistics
-install.packages(c("spatstat", "sp", "sf", "gstat", "geoR",
-                   "raster", "OpenStreetMap", "rJava"))
+# 7. Geostatistics and Spatial Modeling
+install.packages(c("spatstat", "sp", "sf", "gstat", "geoR", "raster", "OpenStreetMap", "rJava"))
 
-# 8. Text Mining and NLP
-install.packages(c("tm", "SnowballC", "topicmodels", "tidytext",
-                   "cld3", "lda", "wordcloud", "RColorBrewer"))
-
+# 8. Textual Analysis and NLP
+install.packages(c("tm", "SnowballC", "topicmodels", "tidytext", "cld3", "lda", "wordcloud", "RColorBrewer"))
 remotes::install_github("nikita-moor/ldatuning")
 ```
 
 ### Python Environment
 
-The Python environment is used for the integration of specific clustering algorithms and data exchange with R.
-
-Install the required packages using:
+To run the integration of algorithms and export data to R, the following packages are used:
 
 ```bash
 pip install pandas numpy gower scipy matplotlib scikit-learn pyreadr
